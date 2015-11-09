@@ -1,0 +1,62 @@
+<script src="jquery-1.11.1.min.js"></script>
+<script>
+var App= {};
+
+App.
+WebPage = {
+   clickPromise:function(elementId){
+           return new Promise(function(resolv, response){
+               
+                $("#"+elementId).click(resolv);
+           }) 
+   },DelayPromise:function(second)
+       {
+           return new Promise(function(resolv, response){
+           setTimeout(resolv, second*1000);
+               App.WebPage.clickPromise.call('button');
+           }) 
+       },
+    WebPage : function(name) {
+        alert("In Super==>"+name);
+        this.name = name;  
+    },Home : function(name) {
+         alert("In Sub==>"+name);
+         App.WebPage.WebPage.call(this, name);
+    }
+};
+
+
+App.WebPage.WebPage.prototype.sayName = function() {
+   alert(this.name);
+};
+
+/*var p = Object.create(App.WebPage.Home);
+   p.constructor = App.WebPage.WebPage;
+   App.WebPage.WebPage.prototype = p;
+*/
+//var x = new App.WebPage.Home("zack");
+var x = new App.WebPage.Home("zack");
+
+
+
+$(document).ready(function(){
+App.WebPage.clickPromise('img').then(function(){
+   $("#changetext").html('<b>after 10 second it will smile image Using the promise concept..</b>');
+$('#image1').css('display','inline');
+
+return App.WebPage.DelayPromise(10);
+}).then(function(){
+ $("#changetext").html('<b>Smile Please</b>');  
+ $('#image1').attr('src','images/smile.jpg');
+ $('#img').hide();
+
+}); 
+})
+
+</script>
+
+<body>
+<div id="changetext"><b>Click On Button </b></div>
+<img id="image1" src="images/sad.jpg" style="display:none" >
+<button id="img">Smile</button>
+</body>
